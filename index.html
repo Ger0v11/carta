@@ -212,11 +212,41 @@
       .final-heart-4 { bottom: -16px; right: 8px; transform: rotate(-85deg) scale(1.1); }
       .final-heart-5 { top: 28px; left: 110px; transform: rotate(14deg) scale(0.86); }
       .final-heart-6 { bottom: 34px; right: 94px; transform: rotate(4deg) scale(0.84); }
-        position: absolute;
-        width: 120px;
-        height: 120px;
-        border-radius: 50%;
-        background: inherit;
+
+      .result-card {
+        border-radius: 34px;
+        padding: 36px 32px;
+        background: linear-gradient(180deg, rgba(255, 247, 251, 0.96), rgba(255, 226, 238, 0.98));
+        border: 1px solid rgba(255, 160, 195, 0.85);
+        box-shadow: 0 20px 50px rgba(221, 82, 133, 0.16);
+      }
+
+      .result-heading {
+        margin: 0 0 20px;
+        font-family: 'Playfair Display', Georgia, serif;
+        font-size: clamp(2rem, 3.5vw, 3rem);
+        color: #8b1f4f;
+        letter-spacing: 0.02em;
+      }
+
+      .result-message {
+        margin: 0;
+        font-size: 1.08rem;
+        line-height: 1.85;
+        color: #4a2440;
+        white-space: pre-line;
+      }
+
+      .result-note {
+        margin-top: 26px;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 14px 20px;
+        border-radius: 999px;
+        background: rgba(255, 204, 222, 0.35);
+        color: #7e214a;
+        font-weight: 700;
       }
 
       .photo-heart-shape::before {
@@ -397,7 +427,7 @@
         <span class="decor heart heart-1" aria-hidden="true"></span>
         <div class="page-body">
           <div class="letter">
-            <p>hola preciosa&lt;3.</p>
+            <p>hola preciosa❤️.</p>
             <p>No soy bueno expresando ciertas cosas, ya sea porque mi personalidad no lo permite o por alguna otra razon, y por eso es que hoy tengo esto para vos, crear estas cosas es lo que me apasiona, pero como hoy vos tambien me apasionas, me moves y me atraes, me gustaria expresartelo mediante algo q conozco y amo casi tanto como a vos.</p>
           </div>
           <div class="photo-box" aria-hidden="true">
@@ -498,6 +528,20 @@
           </div>
         </div>
       </section>
+
+      <section class="page" id="page6">
+        <span class="decor flower flower-3" aria-hidden="true"></span>
+        <div class="page-body">
+          <div class="result-card">
+            <h2 class="result-heading" id="resultHeading">Tu respuesta ha llegado</h2>
+            <p class="result-message" id="resultMessage"></p>
+            <div class="result-note">Volverás a la página anterior para leer la carta otra vez si querés.</div>
+          </div>
+          <div class="button-row">
+            <button class="btn" data-prev="page5" type="button">Volver</button>
+          </div>
+        </div>
+      </section>
     </main>
 
     <script>
@@ -534,6 +578,21 @@
         others.forEach((button) => button.classList.remove('choice-selected'));
       }
 
+      function setResultPage(choice) {
+        const resultHeading = document.getElementById('resultHeading');
+        const resultMessage = document.getElementById('resultMessage');
+
+        if (choice === 'Sí') {
+          resultHeading.textContent = 'Gracias hermosa';
+          resultMessage.innerHTML = 'Gracias hermosa, gracias por permitirme ser parte de tu vida, esta carta siempre la vas a tener a mano, siempre que quieras recordarlo en todo momento y en todo lugar, <strong>TE AMO❤️</strong>';
+        } else {
+          resultHeading.textContent = 'Gracias por tu tiempo';
+          resultMessage.innerHTML = 'No era la respuesta que esperaba, pero gracias por haber llegado hasta el final y por tomarte el tiempo de leer todo esto, porque lo que siento por vos no cambia el cariño y el respeto que te tengo, la puerta siempre la tenes abierta❤️';
+        }
+
+        showPage('page6');
+      }
+
       function sendChoice(choice) {
         const endpoint = 'https://formspree.io/f/mwvdgpvy';
         fetch(endpoint, {
@@ -554,11 +613,13 @@
       yesButton.addEventListener('click', () => {
         selectChoice(yesButton, [noButton]);
         sendChoice('Sí');
+        setResultPage('Sí');
       });
 
       noButton.addEventListener('click', () => {
         selectChoice(noButton, [yesButton]);
         sendChoice('No');
+        setResultPage('No');
       });
     </script>
   </body>
