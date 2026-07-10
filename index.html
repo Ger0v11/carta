@@ -167,6 +167,117 @@
         pointer-events: none;
       }
 
+      .cover-card {
+        cursor: pointer;
+        width: 100%;
+        max-width: 460px;
+        margin: 0 auto;
+        display: grid;
+        gap: 18px;
+        justify-items: center;
+        min-height: 360px;
+      }
+
+      .cover-envelope {
+        width: 100%;
+        max-width: 460px;
+        min-height: 320px;
+        border-radius: 34px;
+        position: relative;
+        background: linear-gradient(180deg, #fff0f6 0%, #ffd7e9 100%);
+        border: 2px solid rgba(221, 87, 130, 0.65);
+        box-shadow: 0 38px 90px rgba(183, 46, 92, 0.24);
+        overflow: hidden;
+      }
+
+      .cover-envelope::after {
+        content: "";
+        position: absolute;
+        left: 50%;
+        top: 20px;
+        width: 120px;
+        height: 120px;
+        background: rgba(255, 255, 255, 0.18);
+        border-radius: 50%;
+        transform: translateX(-50%);
+        pointer-events: none;
+      }
+
+      .cover-envelope::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(180deg, rgba(255,255,255,0.28), transparent 32%);
+        pointer-events: none;
+      }
+
+      .envelope-flap {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 48%;
+        background: linear-gradient(180deg, #ffd0e4 0%, #ffc0dc 100%);
+        clip-path: polygon(0 0, 100% 0, 55% 100%, 45% 100%);
+        transform-origin: top center;
+        transition: transform 0.75s ease;
+        z-index: 2;
+      }
+
+      .cover-envelope.open .envelope-flap {
+        transform: perspective(520px) rotateX(-90deg);
+      }
+
+      .envelope-body {
+        position: absolute;
+        inset: 0;
+        padding: 44px 30px 28px;
+        display: grid;
+        gap: 18px;
+        z-index: 1;
+        pointer-events: none;
+      }
+
+      .envelope-body h2,
+      .envelope-body p,
+      .envelope-body .cover-footer {
+        pointer-events: none;
+      }
+
+      .cover-header {
+        margin: 0;
+        font-family: 'Playfair Display', Georgia, serif;
+        font-size: clamp(2rem, 4vw, 3rem);
+        color: #941d55;
+        text-align: center;
+        letter-spacing: 0.02em;
+      }
+
+      .cover-text {
+        margin: 0;
+        font-size: 1.05rem;
+        line-height: 1.9;
+        color: #57273f;
+        text-align: center;
+      }
+
+      .cover-footer {
+        margin-top: auto;
+        text-align: center;
+        font-size: 0.95rem;
+        font-weight: 700;
+        color: #7e214a;
+        padding: 14px 18px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.8);
+        box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.7);
+      }
+
+      .cover-card:focus-visible {
+        outline: 3px solid rgba(255, 111, 160, 0.45);
+        outline-offset: 4px;
+      }
+
       .photo-final-wrap {
         position: relative;
         width: min(100%, 280px);
@@ -423,7 +534,22 @@
     <main class="page-wrap" aria-label="Carta para Martu">
       <h1 class="sr-only">Carta para Martu</h1>
 
-      <section class="page active" id="page1">
+      <section class="page active" id="page0">
+        <div class="page-body">
+          <div class="cover-card" id="startCard" role="button" tabindex="0" aria-label="Toca la carta para arrancar">
+            <h2 class="cover-title">Para vos, bella❤️</h2>
+            <div class="cover-envelope" id="coverEnvelope">
+              <div class="envelope-flap"></div>
+              <div class="envelope-body">
+                <p class="cover-text"></p>
+                <div class="cover-footer">toca la carta para arrancar</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="page" id="page1">
         <span class="decor heart heart-1" aria-hidden="true"></span>
         <div class="page-body">
           <div class="letter">
@@ -550,6 +676,7 @@
       const pages = document.querySelectorAll('.page');
       const yesButton = document.getElementById('yesButton');
       const noButton = document.getElementById('noButton');
+      const startCard = document.getElementById('startCard');
 
       function showPage(pageId) {
         pages.forEach((page) => page.classList.remove('active'));
@@ -565,6 +692,25 @@
           showPage(nextId);
         });
       });
+
+      if (startCard) {
+        const coverEnvelope = document.getElementById('coverEnvelope');
+        const openCard = () => {
+          if (coverEnvelope) {
+            coverEnvelope.classList.add('open');
+          }
+          startCard.style.pointerEvents = 'none';
+          setTimeout(() => showPage('page1'), 740);
+        };
+
+        startCard.addEventListener('click', openCard);
+        startCard.addEventListener('keydown', (event) => {
+          if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            openCard();
+          }
+        });
+      }
 
       prevButtons.forEach((button) => {
         button.addEventListener('click', () => {
