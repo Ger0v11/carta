@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Carta para Martu</title>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500&family=Playfair+Display:wght@500;600;700&family=Inter:wght@400;500;600&display=swap');
+
+      :root {
+        --rose: #f75098;
+        --pink: #ffbed7;
+        --deep: #8b1f48;
+        --soft: #ffe8f3;
+        --cream: #fff2f7;
+        --shadow: rgba(139, 31, 72, 0.18);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: 'Inter', 'Segoe UI', sans-serif;
+        color: #4a2440;
+        background: radial-gradient(circle at top, #ffe9f4 0%, #ffd7e9 35%, #f8d0e4 65%, #fff3f9 100%);
+        overflow-x: hidden;
+      }
+
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        background-image:
+          radial-gradient(circle at 12% 10%, rgba(255, 255, 255, 0.8), transparent 18%),
+          radial-gradient(circle at 88% 12%, rgba(255, 174, 217, 0.28), transparent 20%),
+          radial-gradient(circle at 42% 82%, rgba(255, 219, 232, 0.6), transparent 25%);
+        pointer-events: none;
+      }
+
+      .page-wrap {
+        position: relative;
+        padding: 40px 20px 80px;
+        max-width: 980px;
+        margin: 0 auto;
+      }
+
+      .page {
+        display: none;
+        position: relative;
+        padding: 36px 32px;
+        border-radius: 40px;
+        background-color: rgba(255, 255, 255, 0.98);
+        background-image:
+          radial-gradient(circle at 10% 15%, rgba(255, 238, 246, 0.88), transparent 18%),
+          radial-gradient(circle at 85% 20%, rgba(255, 213, 235, 0.72), transparent 22%),
+          url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 48 48'%3E%3Cpath d='M24 36s-14-9.7-14-18c0-4.9 4-9 9-9 2.6 0 5 1.2 6.5 3.1C27 10.2 29.4 9 32 9c5 0 9 4.1 9 9 0 8.3-14 18-14 18z' fill='%23ffb3d4' fill-opacity='0.16'/%3E%3C/svg%3E");
+        background-repeat: repeat;
+        background-size: 84px 84px;
+        border: 1px solid rgba(255, 255, 255, 0.82);
+        box-shadow: 0 26px 80px rgba(143, 30, 76, 0.16);
+        overflow: hidden;
+      }
+
+      .page.active {
+        display: block;
+        animation: fadeIn 0.7s ease;
+      }
+
+      .page::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(circle at 10% 10%, rgba(255, 241, 247, 0.92), transparent 15%),
+          radial-gradient(circle at 85% 14%, rgba(255, 172, 208, 0.2), transparent 24%),
+          linear-gradient(150deg, rgba(255, 255, 255, 0.55) 0%, transparent 45%);
+        pointer-events: none;
+      }
+
+      .page::after {
+        content: "";
+        position: absolute;
+        bottom: -24px;
+        left: -24px;
+        width: 220px;
+        height: 220px;
+        background: radial-gradient(circle at 50% 50%, rgba(255, 205, 226, 0.36), transparent 58%);
+        border-radius: 50%;
+        pointer-events: none;
+      }
+
+      .page-body {
+        display: grid;
+        gap: 28px;
+        position: relative;
+        z-index: 1;
+      }
+
+      .letter {
+        display: grid;
+        gap: 24px;
+      }
+
+      .letter p {
+        margin: 0;
+        font-size: 1.05rem;
+        line-height: 2;
+        letter-spacing: 0.02em;
+        color: #4a2440;
+      }
+
+      .letter p strong {
+        font-family: 'Playfair Display', Georgia, serif;
+        font-weight: 700;
+        color: #b92269;
+      }
+      .quote {
+        font-family: 'Playfair Display', Georgia, serif;
+        font-size: 1.45rem;
+        font-weight: 700;
+        color: #8b1f4f;
+        line-height: 1.7;
+        text-align: center;
+        margin: 0 auto;
+        max-width: 760px;
+        letter-spacing: 0.02em;
+      }
+      .photo-box {
+        position: relative;
+        width: min(100%, 280px);
+        margin: 0 auto;
+        border-radius: 24px;
+        overflow: hidden;
+        box-shadow: 0 18px 40px rgba(155, 39, 98, 0.18);
+        border: 1px solid rgba(255, 173, 204, 0.8);
+        background: linear-gradient(180deg, rgba(255,255,255,0.92), rgba(255, 237, 244, 0.95));
+        transform: rotate(-2deg);
+      }
+
+      .photo-box img {
+        width: 100%;
+        display: block;
+        aspect-ratio: 4 / 5;
+        object-fit: cover;
+      }
+
+      .photo-box::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(circle at 90% 10%, rgba(255, 255, 255, 0.45), transparent 24%),
+          linear-gradient(135deg, transparent 30%, rgba(255, 207, 231, 0.26) 100%);
+        pointer-events: none;
+      }
+
+      .photo-box::after {
+        content: "";
+        position: absolute;
+        top: 12px;
+        left: 12px;
+        right: 12px;
+        bottom: 12px;
+        border: 6px solid rgba(255, 255, 255, 0.95);
+        border-radius: 22px;
+        pointer-events: none;
+      }
+
+      .photo-final-wrap {
+        position: relative;
+        width: min(100%, 280px);
+        margin: 0 auto;
+      }
+
+      .photo-final-wrap .photo-box {
+        transform: none;
+      }
+
+      .final-heart {
+        position: absolute;
+        width: 32px;
+        height: 32px;
+        background: linear-gradient(135deg, #8b122d 0%, #43040f 100%);
+        transform: rotate(-45deg);
+        border-radius: 50% 50% 0 0;
+      }
+
+      .final-heart::before,
+      .final-heart::after {
+        content: "";
+        position: absolute;
+        width: 32px;
+        height: 32px;
+        background: inherit;
+        border-radius: 50%;
+      }
+
+      .final-heart::before {
+        top: -16px;
+        left: 0;
+      }
+
+      .final-heart::after {
+        top: 0;
+        left: 16px;
+      }
+
+      .final-heart-1 { top: -14px; left: -18px; transform: rotate(-32deg) scale(0.9); }
+      .final-heart-2 { top: 12px; right: -14px; transform: rotate(-12deg) scale(1.05); }
+      .final-heart-3 { bottom: 18px; left: -12px; transform: rotate(-60deg) scale(0.95); }
+      .final-heart-4 { bottom: -16px; right: 8px; transform: rotate(-85deg) scale(1.1); }
+      .final-heart-5 { top: 28px; left: 110px; transform: rotate(14deg) scale(0.86); }
+      .final-heart-6 { bottom: 34px; right: 94px; transform: rotate(4deg) scale(0.84); }
+        position: absolute;
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        background: inherit;
+      }
+
+      .photo-heart-shape::before {
+        top: -60px;
+        left: 0;
+      }
+
+      .photo-heart-shape::after {
+        left: 60px;
+        top: 0;
+      }
+
+      .decor {
+        position: absolute;
+        pointer-events: none;
+      }
+
+      .heart {
+        width: 46px;
+        height: 46px;
+        background: linear-gradient(135deg, #ff96bd, #ff6193);
+        transform: rotate(-45deg);
+      }
+
+      .heart::before,
+      .heart::after {
+        content: "";
+        position: absolute;
+        width: 46px;
+        height: 46px;
+        border-radius: 50%;
+        background: inherit;
+      }
+
+      .heart::before {
+        top: -23px;
+        left: 0;
+      }
+
+      .heart::after {
+        left: 23px;
+        top: 0;
+      }
+
+      .flower {
+        width: 42px;
+        height: 42px;
+        border-radius: 50%;
+        background: radial-gradient(circle at 50% 50%, #fff6fa 0%, #ffbed7 38%, transparent 80%);
+        box-shadow: inset 0 0 0 2px rgba(255, 182, 211, 0.52);
+      }
+
+      .heart-1 { top: 16px; right: 24px; }
+      .heart-2 { top: 120px; left: 20px; transform: scale(0.85) rotate(-45deg); }
+      .heart-3 { bottom: 32px; right: 42px; transform: scale(0.76) rotate(-45deg); }
+      .flower-1 { top: 72px; left: 18px; }
+      .flower-2 { bottom: 94px; left: 48%; }
+      .flower-3 { bottom: 32px; right: 110px; }
+
+      .button-row {
+        display: flex;
+        justify-content: center;
+        gap: 14px;
+        flex-wrap: wrap;
+        margin-top: 34px;
+      }
+
+      .btn {
+        border: 1px solid rgba(255, 255, 255, 0.86);
+        border-radius: 999px;
+        cursor: pointer;
+        padding: 16px 34px;
+        font-size: 1rem;
+        font-weight: 700;
+        background: linear-gradient(135deg, #f84a9b 0%, #ff76b7 100%);
+        color: white;
+        box-shadow: 0 18px 42px rgba(214, 48, 108, 0.24);
+        transition: transform 0.25s ease, box-shadow 0.25s ease, filter 0.25s ease;
+      }
+
+      .btn.secondary {
+        background: linear-gradient(135deg, #ffd6ea 0%, #ffb0d7 100%);
+        color: #541a3d;
+      }
+
+      .btn:hover,
+      .btn:focus-visible {
+        transform: translateY(-2px);
+        filter: brightness(1.05);
+      }
+
+      .btn:active {
+        transform: translateY(0);
+      }
+
+      .final-title {
+        margin: 0;
+        font-family: 'Playfair Display', Georgia, serif;
+        font-size: clamp(2rem, 4vw, 3.4rem);
+        line-height: 1.05;
+        text-align: center;
+        color: #861a55;
+      }
+
+      .final-text {
+        margin: 12px 0 0;
+        text-align: center;
+        font-size: 1.05rem;
+        color: #5b2f4c;
+      }
+
+      .accent {
+        font-family: 'Playfair Display', Georgia, serif;
+        font-weight: 700;
+        color: #b92169;
+      }
+
+      .choices {
+        display: flex;
+        justify-content: center;
+        gap: 18px;
+        flex-wrap: wrap;
+        margin-top: 32px;
+      }
+
+      .choice-selected {
+        outline: 4px solid rgba(255, 111, 160, 0.35);
+        transform: scale(1.02);
+      }
+
+      .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+      }
+
+      @media (max-width: 760px) {
+        .page {
+          padding: 28px 24px;
+        }
+
+        .photo-box {
+          width: 100%;
+        }
+
+        .decor {
+          display: none;
+        }
+
+        .page-wrap {
+          padding: 24px 16px 60px;
+        }
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(18px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="page-wrap" aria-label="Carta para Martu">
+      <h1 class="sr-only">Carta para Martu</h1>
+
+      <section class="page active" id="page1">
+        <span class="decor heart heart-1" aria-hidden="true"></span>
+        <div class="page-body">
+          <div class="letter">
+            <p>hola preciosa&lt;3.</p>
+            <p>No soy bueno expresando ciertas cosas, ya sea porque mi personalidad no lo permite o por alguna otra razon, y por eso es que hoy tengo esto para vos, crear estas cosas es lo que me apasiona, pero como hoy vos tambien me apasionas, me moves y me atraes, me gustaria expresartelo mediante algo q conozco y amo casi tanto como a vos.</p>
+          </div>
+          <div class="photo-box" aria-hidden="true">
+            <img src="fotos con martu/WhatsApp%20Image%202026-07-09%20at%207.36.35%20PM.jpeg" alt="" />
+          </div>
+          <div class="button-row">
+            <button class="btn" data-next="page2" type="button">Seguir</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="page" id="page2">
+        <span class="decor flower flower-1" aria-hidden="true"></span>
+        <div class="page-body">
+          <div class="letter">
+            <p><span class="accent">Gracias</span> por ser como sos, por iluminarme y darme la posibilidad de ser un poquito mejor todos los dias, por permitirte mostrarte vulnerable conmigo y por hacerme sentir tan pero tan amado. Todo eso me das, capaz conciente o inconcientemente, pero lo haces, y gracias a eso me permitis admirarte y amarte un poquito mas todos los dias.</p>
+          </div>
+          <div class="photo-box" aria-hidden="true">
+            <img src="fotos con martu/WhatsApp%20Image%202026-07-09%20at%207.36.36%20PM.jpeg" alt="" />
+          </div>
+          <div class="button-row">
+            <button class="btn" data-prev="page1" type="button">Volver</button>
+            <button class="btn" data-next="page3" type="button">Seguir</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="page" id="page3">
+        <span class="decor heart heart-2" aria-hidden="true"></span>
+        <div class="page-body">
+          <div class="letter">
+            <p><span class="accent">Disfruto</span> cuando hablamos de cualquier cosa y cuando nos reimos juntos de las boludeces que siempre digo, de mis chistes malos y de lo bobo q soy aveces para hablar con vos, pero es un <span class="accent">privilegio</span> para mi poder mostrarme como soy con vos, sin ninguna limitacion ni miedo de sentirme juzgado, gracias por darme seguridad y confianza, tanto con vos como en mi mismo, verdaderamente me siento un pibe con suerte, y cualquiera que pudiera conocerte como lo hago yo podria decir lo mismo.</p>
+          </div>
+          <div class="photo-box" aria-hidden="true">
+            <img src="fotos con martu/WhatsApp%20Image%202026-07-09%20at%207.36.37%20PM.jpeg" alt="" />
+          </div>
+          <div class="button-row">
+            <button class="btn" data-prev="page2" type="button">Volver</button>
+            <button class="btn" data-next="page4" type="button">Seguir</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="page" id="page4">
+        <span class="decor flower flower-2" aria-hidden="true"></span>
+        <div class="page-body">
+          <div class="letter">
+            <p><span class="accent">Me enamora</span> tu personalidad, tu belleza, tu pasion por la musica, es como si todo lo demas no m importara en lo absoluto cuando estas hablando de algo q te apasiona de verdad, cuando me tiras datos de spinetta o los beatles, o cuando te pones a hablar de jazz, me sorprendes todos los dias hermosa y eso me hace amarte siempre mas.</p>
+          </div>
+          <div class="photo-box" aria-hidden="true">
+            <img src="fotos con martu/WhatsApp%20Image%202026-07-09%20at%207.36.35%20PM%20(1).jpeg" alt="" />
+          </div>
+          <div class="button-row">
+            <button class="btn" data-prev="page3" type="button">Volver</button>
+            <button class="btn" data-next="page4-quote" type="button">Seguir</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="page" id="page4-quote">
+        <span class="decor heart heart-3" aria-hidden="true"></span>
+        <div class="page-body">
+          <div class="letter">
+            <p class="quote">"Yo te amo tanto, que no puedo despertarme sin amar"</p>
+            <p>Pero me cansa la monotonia de que no nos aseguremos de ser o de no ser, no quiero volver a despertarme sin amar nunca mas hermosa, y te lo pido, permitime hacerlo sabiendo que soy tuyo y vos mia, porque si llegaste es por algo y no voy a dejarlo pasar mas tiempo, llegue tarde pero al final, llegue, y creo que es momento de que comencemos a construir algo, espero vos pienses lo mismo.</p>
+          </div>
+          <div class="button-row">
+            <button class="btn" data-prev="page4" type="button">Volver</button>
+            <button class="btn" data-next="page5" type="button">Seguir</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="page" id="page5">
+        <span class="decor heart heart-3" aria-hidden="true"></span>
+        <div class="page-body">
+          <div class="letter">
+            <h2 class="final-title">¿Me permitirías ser tuyo?</h2>
+            <p class="final-text">Elegí una respuesta cuando estés lista.</p>
+          </div>
+          <div class="photo-final-wrap" aria-hidden="true">
+            <div class="photo-box">
+              <img src="fotos con martu/WhatsApp%20Image%202026-07-09%20at%207.36.35%20PM.jpeg" alt="" />
+            </div>
+            <span class="final-heart final-heart-1" aria-hidden="true"></span>
+            <span class="final-heart final-heart-2" aria-hidden="true"></span>
+            <span class="final-heart final-heart-3" aria-hidden="true"></span>
+            <span class="final-heart final-heart-4" aria-hidden="true"></span>
+            <span class="final-heart final-heart-5" aria-hidden="true"></span>
+            <span class="final-heart final-heart-6" aria-hidden="true"></span>
+          </div>
+          <div class="choices">
+            <button class="btn choice" id="yesButton" type="button">Sí</button>
+            <button class="btn secondary choice" id="noButton" type="button">No</button>
+          </div>
+          <div class="button-row">
+            <button class="btn" data-prev="page4" type="button">Volver</button>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      const nextButtons = document.querySelectorAll('[data-next]');
+      const prevButtons = document.querySelectorAll('[data-prev]');
+      const pages = document.querySelectorAll('.page');
+      const yesButton = document.getElementById('yesButton');
+      const noButton = document.getElementById('noButton');
+
+      function showPage(pageId) {
+        pages.forEach((page) => page.classList.remove('active'));
+        const nextPage = document.getElementById(pageId);
+        if (nextPage) {
+          nextPage.classList.add('active');
+        }
+      }
+
+      nextButtons.forEach((button) => {
+        button.addEventListener('click', () => {
+          const nextId = button.getAttribute('data-next');
+          showPage(nextId);
+        });
+      });
+
+      prevButtons.forEach((button) => {
+        button.addEventListener('click', () => {
+          const prevId = button.getAttribute('data-prev');
+          showPage(prevId);
+        });
+      });
+
+      function selectChoice(selected, others) {
+        selected.classList.add('choice-selected');
+        others.forEach((button) => button.classList.remove('choice-selected'));
+      }
+
+      function sendChoice(choice) {
+        const endpoint = 'https://formspree.io/f/mwvdgpvy';
+        fetch(endpoint, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+          },
+          body: JSON.stringify({
+            choice,
+            timestamp: new Date().toISOString(),
+          }),
+        }).catch(() => {
+          // no mostrar errores al usuario, la magia sigue oculta
+        });
+      }
+
+      yesButton.addEventListener('click', () => {
+        selectChoice(yesButton, [noButton]);
+        sendChoice('Sí');
+      });
+
+      noButton.addEventListener('click', () => {
+        selectChoice(noButton, [yesButton]);
+        sendChoice('No');
+      });
+    </script>
+  </body>
+</html>
